@@ -1,52 +1,42 @@
 // Package aws provide function to get resource usage from aws api
 package aws
 
-var (
-	regions = []string{
-		"us-east-2",
-		"us-east-1",
-		"us-west-1",
-		"us-west-2",
-		"af-south-1",
-		"ap-east-1",
-		"ap-south-1",
-		"ap-northeast-3",
-		"ap-northeast-2",
-		"ap-northeast-1",
-		"ap-southeast-2",
-		"ap-southeast-1",
-		"ca-central-1",
-		"cn-north-1",
-		"cn-northwest-1",
-		"eu-central-1",
-		"eu-west-1",
-		"eu-west-2",
-		"eu-south-1",
-		"eu-west-3",
-		"eu-north-1",
-		"me-south-1",
-		"sa-east-1",
-		"us-gov-east-1",
-		"us-gov-west-1",
-	}
+import (
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
 )
+
+// GetSession return struct of aws session
+func (cloud *Cloud) GetSession(region string) error {
+	var err error
+	cloud.session, err = session.NewSession(&aws.Config{
+		Region: aws.String(region),
+	})
+	cloud.Region = region
+	return err
+}
 
 // Cloud is contain all resource of aws
 type Cloud struct {
-}
+	session *session.Session
 
-// Resources is contain all resource of aws
-type Resources struct {
-}
-
-// GetAllResources retrun string format with all resources usage
-func GetAllResources() string {
-	return ""
+	Region        string
+	Ec2instances  []EC2instance
+	S3buckets     []S3Bucket
+	ELBs          []ELB
+	EBSs          []EBS
+	VPCs          []EBS
+	Addresss      []EBS
+	Disks         []EBS
+	FirewallRules []EBS
 }
 
 // ReportTitle return title format
 func (Cloud) ReportTitle() string {
-	return "AWS Usage Reporting"
+	return "AWS Usage Report"
 }
 
-// TODO: list of resource need to catch up !! disks addresses fwRules vpc s3
+// String return string data of struct
+func (cloud Cloud) String() string {
+	return ""
+}

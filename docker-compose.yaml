@@ -1,0 +1,27 @@
+version: "3.7"
+services:
+  cur:
+    image: pepodev/cur
+    build:
+      context: .
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:6.0-alpine
+    restart: always
+    volumes:
+      - redis_data:/data
+
+  redis-commander:
+    image: rediscommander/redis-commander
+    restart: always
+    environment:
+      - REDIS_HOSTS=redis:redis:6379
+    ports:
+      - "8081:8081"
+    depends_on:
+      - redis
+
+volumes:
+  redis_data:

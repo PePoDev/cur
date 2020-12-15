@@ -31,21 +31,24 @@ var awsCmd = &cobra.Command{
 		xlog.Debugln("Request session for region", region)
 		cloud.GetSession(region)
 
-		xlog.Infof("Fetching instance details")
+		xlog.Infof("Fetching EC2 Instances details")
 		if ec2instance, err := cloud.FetchEC2Instances(); err != nil {
 			xlog.Panic(err.Error())
 		} else if len(ec2instance) == 0 {
 			xlog.Infof("Nothing instance found\n\n")
 		} else {
-			xlog.Debugln("Found", len(ec2instance), "instances")
+			xlog.Infof("Found", len(ec2instance), "instances")
 			for _, instance := range ec2instance {
-				xlog.Debugf("- Id[%v] Name[%v] Type[%v] Status[%v]", instance.ID, instance.Name, instance.Type, instance.Status)
+				xlog.Infof("- Id[%v] Name[%v] Type[%v] Status[%v]", instance.ID, instance.Name, instance.Type, instance.Status)
 
 			}
 		}
 		xlog.Infof("Fetched")
 
+		xlog.Infof("Fetching S3 details")
 		cloud.FetchS3Buckets()
+		xlog.Infof("Fetched")
+
 		cloud.FetchELBs()
 		cloud.FetchEBSs()
 
